@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة سايبر كافيه</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --card-bg: #fff;
+            --primary-color: #2e4057;
+            --primary-hover: #1a2639;
+            --border-color: #ddd;
+            --success-bg: #e3f2e3;
+            --success-color: #2e7d32;
+            --warning-bg: #ffefc7;
+            --warning-color: #ff8f00;
+            --danger-color: #f44336;
+            --danger-hover: #d32f2f;
+            --success-btn: #4caf50;
+            --success-btn-hover: #388e3c;
+        }
+        
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --primary-color: #3f51b5;
+            --primary-hover: #303f9f;
+            --border-color: #333;
+            --success-bg: #1b3a1b;
+            --success-color: #4caf50;
+            --warning-bg: #3e2e00;
+            --warning-color: #ffc107;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        
+        .login-container h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 15px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+        }
+        
+        .nav-link {
+            margin-left: 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .device-box {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .device-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .device-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        
+        .status.available {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+        }
+        
+        .status.in-use {
+            background-color: var(--warning-bg);
+            color: var(--warning-color);
+        }
+        
+        .device-info {
+            margin-bottom: 15px;
+        }
+        
+        .device-info p {
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        .device-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .section-title {
+            margin: 30px 0 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .menu-item {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .menu-item-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .menu-item-price {
+            color: #ff6b6b;
+            margin: 5px 0;
+        }
+        
+        .settings-container {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .settings-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .settings-section {
+            margin-bottom: 20px;
+        }
+        
+        .settings-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .setting-item label {
+            flex: 1;
+        }
+        
+        .setting-item input {
+            width: 100px;
+        }
+        
+        .dashboard-page, .food-page, .drinks-page, .settings-page {
+            display: none;
+        }
+        
+        .active-page {
+            display: block;
+        }
+        
+        /* Timer styling */
+        .timer {
+            font-weight: bold;
+            font-size: 18px;
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+        
+        /* Control buttons */
+        .control-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .start-btn {
+            background-color: var(--success-btn);
+            color: white;
+        }
+        
+        .start-btn:hover {
+            background-color: var(--success-btn-hover);
+        }
+        
+        .stop-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .stop-btn:hover {
+            background-color: var(--danger-hover);
+        }
+        
+        /* New features styling */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .add-form {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--card-bg);
+        }
+        
+        .add-form input {
+            margin-bottom: 10px;
+        }
+        
+        .language-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .language-btn {
+            padding: 8px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .language-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Plus button styling */
+        .add-new-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--success-btn);
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .add-new-btn:hover {
+            background-color: var(--success-btn-hover);
+            transform: scale(1.1);
+        }
+        
+        .add-new-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .close-modal {
+            color: var(--text-color);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .modal-btn.cancel {
+            background-color: #ccc;
+            color: var(--text-color);
+        }
+        
+        .modal-btn.confirm {
+            background-color: var(--success-btn);
+            color: white;
+        }
+        
+        /* Delete button styling */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--danger-color);
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .device-box:hover .delete-btn,
+        .menu-item:hover .delete-btn {
+            opacity: 1;
+        }
+        
+        .delete-btn:hover {
+            background-color: var(--danger-hover);
+        }
+        
+        /* Delete management section */
+        .delete-management {
+            margin-top: 20px;
+        }
+        
+        .delete-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .delete-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .delete-item:last-child {
+            border-bottom: none;
+        }
+        
+        .delete-item-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .delete-item-btn:hover {
+            background-color: var(--danger-hover);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="login-page">
+        <h1>تسجيل الدخول</h1>
+        <form id="login-form">
+            <div class="form-group">
+                <input type="text" id="username" placeholder="اسم المستخدم" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="كلمة المرور" required>
+            </div>
+            <button type="submit" class="btn">تسجيل الدخول</button>
+        </form>
+    </div>
+
+    <!-- Main App -->
+    <div class="container" id="app" style="display: none;">
+        <div class="header">
+            <h1>إدارة سايبر كافيه</h1>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="dashboard">الأجهزة</a>
+                <a href="#" class="nav-link" data-page="drinks">المشروبات</a>
+                <a href="#" class="nav-link" data-page="food">المأكولات</a>
+                <a href="#" class="nav-link" data-page="settings">الإعدادات</a>
+                <a href="#" class="nav-link" id="logout-btn">تسجيل الخروج</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Page (Devices) -->
+        <div class="dashboard-page active-page" id="dashboard-page">
+            <div class="section-title">
+                <h2>أجهزة بلايستيشن 5</h2>
+            </div>
+            <div class="dashboard" id="ps5-devices">
+                <div class="device-box" data-id="ps5-1">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS5 #1
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps5-2">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS5 #2
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps5-3">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS5 #3
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps5-4">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS5 #4
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="add-new-container">
+                    <button class="add-new-btn" id="add-ps5-btn">+</button>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h2>أجهزة بلايستيشن 4</h2>
+            </div>
+            <div class="dashboard" id="ps4-devices">
+                <div class="device-box" data-id="ps4-1">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS4 #1
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps4-2">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS4 #2
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps4-3">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS4 #3
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="device-box" data-id="ps4-4">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <h3>
+                        جهاز PS4 #4
+                        <span class="status available">متاح</span>
+                    </h3>
+                    <div class="device-info">
+                        <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                        <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                    </div>
+                    <div class="device-actions">
+                        <button class="control-btn start-btn">بدء</button>
+                        <button class="control-btn stop-btn" disabled>إيقاف</button>
+                    </div>
+                </div>
+                <div class="add-new-container">
+                    <button class="add-new-btn" id="add-ps4-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drinks Page -->
+        <div class="drinks-page" id="drinks-page">
+            <h2 class="section-title">المشروبات</h2>
+            <div class="menu-container" id="drinks-container">
+                <div class="menu-item" data-id="drink-1">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">قهوة</span>
+                    <span class="menu-item-price">15 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="drink-2">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">شاي</span>
+                    <span class="menu-item-price">10 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="drink-3">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">عصير برتقال</span>
+                    <span class="menu-item-price">20 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="drink-4">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">كولا</span>
+                    <span class="menu-item-price">15 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="drink-5">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">مياه معدنية</span>
+                    <span class="menu-item-price">5 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="drink-6">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">نسكافيه</span>
+                    <span class="menu-item-price">18 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="add-new-container">
+                    <button class="add-new-btn" id="add-drink-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Page -->
+        <div class="food-page" id="food-page">
+            <h2 class="section-title">المأكولات</h2>
+            <div class="menu-container" id="food-container">
+                <div class="menu-item" data-id="food-1">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">ساندويتش برجر</span>
+                    <span class="menu-item-price">45 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="food-2">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">بيتزا</span>
+                    <span class="menu-item-price">60 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="food-3">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">بطاطس</span>
+                    <span class="menu-item-price">25 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="food-4">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">ناجتس دجاج</span>
+                    <span class="menu-item-price">35 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="food-5">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">سلطة</span>
+                    <span class="menu-item-price">20 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="menu-item" data-id="food-6">
+                    <button class="delete-btn" title="حذف">×</button>
+                    <span class="menu-item-name">كيك</span>
+                    <span class="menu-item-price">15 جنيه</span>
+                    <button class="control-btn start-btn">إضافة</button>
+                </div>
+                <div class="add-new-container">
+                    <button class="add-new-btn" id="add-food-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="settings-page" id="settings-page">
+            <h2 class="section-title">الإعدادات</h2>
+            <div class="settings-container">
+                <div class="settings-form">
+                    <!-- Original Settings -->
+                    <div class="settings-section">
+                        <h3>أسعار الأجهزة (للساعة)</h3>
+                        <div class="setting-item">
+                            <label>سعر ساعة PS5:</label>
+                            <input type="number" id="ps5-price" value="50" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>سعر ساعة PS4:</label>
+                            <input type="number" id="ps4-price" value="30" min="0">
+                        </div>
+                    </div>
+                    
+                    <!-- PlayStation Device Management -->
+                    <div class="settings-section">
+                        <h3>إضافة أجهزة بلايستيشن جديدة</h3>
+                        <div class="setting-item">
+                            <label>نوع الجهاز:</label>
+                            <select id="new-device-type" style="width: 100px;">
+                                <option value="PS5">PS5</option>
+                                <option value="PS4">PS4</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>رقم الجهاز:</label>
+                            <input type="number" id="new-device-number" value="5" min="1">
+                        </div>
+                        <button class="btn" id="add-device-btn" style="margin-top: 10px;">إضافة جهاز جديد</button>
+                    </div>
+                    
+                    <!-- Food & Drinks Management -->
+                    <div class="settings-section">
+                        <h3>إضافة مأكولات ومشروبات جديدة</h3>
+                        <div class="setting-item">
+                            <label>النوع:</label>
+                            <select id="new-item-type" style="width: 100px;">
+                                <option value="food">مأكولات</option>
+                                <option value="drink">مشروبات</option>
+                            </select>
+                        </div>
+                        <div class="add-form" id="new-item-form">
+                            <input type="text" id="new-item-name" placeholder="اسم المنتج" required>
+                            <input type="number" id="new-item-price" placeholder="السعر" min="0" required>
+                            <button class="btn" id="add-item-btn">إضافة منتج جديد</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Language Settings -->
+                    <div class="settings-section">
+                        <h3>إعدادات اللغة</h3>
+                        <div class="setting-item">
+                            <label>اللغة:</label>
+                            <div class="language-selector">
+                                <button class="language-btn active" data-lang="ar">العربية</button>
+                                <button class="language-btn" data-lang="en">English</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dark/Light Mode Toggle -->
+                    <div class="settings-section">
+                        <h3>مظهر التطبيق</h3>
+                        <div class="setting-item">
+                            <label>الوضع المظلم:</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Delete Management -->
+                    <div class="settings-section">
+                        <h3>حذف الأجهزة</h3>
+                        <div class="delete-management">
+                            <div class="delete-list" id="ps5-delete-list">
+                                <!-- PS5 devices will be listed here for deletion -->
+                            </div>
+                            <div class="delete-list" id="ps4-delete-list">
+                                <!-- PS4 devices will be listed here for deletion -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>حذف المأكولات والمشروبات</h3>
+                        <div class="delete-management">
+                            <div class="delete-list" id="food-delete-list">
+                                <!-- Food items will be listed here for deletion -->
+                            </div>
+                            <div class="delete-list" id="drinks-delete-list">
+                                <!-- Drink items will be listed here for deletion -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Original Settings Continued -->
+                    <div class="settings-section">
+                        <h3>إدارة المشروبات</h3>
+                        <div class="setting-item">
+                            <label>قهوة:</label>
+                            <input type="number" value="15" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>شاي:</label>
+                            <input type="number" value="10" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>عصير برتقال:</label>
+                            <input type="number" value="20" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>كولا:</label>
+                            <input type="number" value="15" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>إدارة المأكولات</h3>
+                        <div class="setting-item">
+                            <label>ساندويتش برجر:</label>
+                            <input type="number" value="45" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>بيتزا:</label>
+                            <input type="number" value="60" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>بطاطس:</label>
+                            <input type="number" value="25" min="0">
+                        </div>
+                        <div class="setting-item">
+                            <label>ناجتس دجاج:</label>
+                            <input type="number" value="35" min="0">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="save-settings">حفظ الإعدادات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Food Modal -->
+    <div class="modal" id="add-food-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة مأكولات جديدة</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" id="new-food-name" placeholder="اسم المأكولات" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-food-price" placeholder="السعر" min="0" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancel-add-food">إلغاء</button>
+                <button class="modal-btn confirm" id="confirm-add-food">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Drink Modal -->
+    <div class="modal" id="add-drink-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة مشروبات جديدة</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" id="new-drink-name" placeholder="اسم المشروب" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="new-drink-price" placeholder="السعر" min="0" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancel-add-drink">إلغاء</button>
+                <button class="modal-btn confirm" id="confirm-add-drink">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add PS5 Modal -->
+    <div class="modal" id="add-ps5-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة جهاز PS5 جديد</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>رقم الجهاز:</label>
+                    <input type="number" id="new-ps5-number" min="1" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancel-add-ps5">إلغاء</button>
+                <button class="modal-btn confirm" id="confirm-add-ps5">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add PS4 Modal -->
+    <div class="modal" id="add-ps4-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة جهاز PS4 جديد</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>رقم الجهاز:</label>
+                    <input type="number" id="new-ps4-number" min="1" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancel-add-ps4">إلغاء</button>
+                <button class="modal-btn confirm" id="confirm-add-ps4">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal" id="confirm-delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تأكيد الحذف</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>هل أنت متأكد من حذف هذا العنصر؟</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancel-delete">إلغاء</button>
+                <button class="modal-btn confirm" id="confirm-delete" style="background-color: var(--danger-color);">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login functionality
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple authentication (in real app, you would validate against a server)
+            if (username === 'admin' && password === 'admin') {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+            }
+        });
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            document.getElementById('login-page').style.display = 'block';
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+        
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('[id$="-page"]');
+        
+        navLinks.forEach(link => {
+            if (link.id !== 'logout-btn') {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active nav link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected page
+                    const targetPage = this.getAttribute('data-page');
+                    pages.forEach(page => {
+                        if (page.id === targetPage + '-page') {
+                            page.classList.add('active-page');
+                        } else {
+                            page.classList.remove('active-page');
+                        }
+                    });
+                    
+                    // Update delete lists when settings page is shown
+                    if (targetPage === 'settings') {
+                        updateDeleteLists();
+                    }
+                });
+            }
+        });
+        
+        // Device Timer functionality
+        function setupDeviceTimers() {
+            document.querySelectorAll('.device-box').forEach((deviceBox, index) => {
+                const startBtn = deviceBox.querySelector('.start-btn');
+                const stopBtn = deviceBox.querySelector('.stop-btn');
+                const timerEl = deviceBox.querySelector('.timer');
+                const costEl = deviceBox.querySelector('.cost');
+                const statusEl = deviceBox.querySelector('.status');
+                
+                if (!startBtn || !stopBtn || !timerEl || !costEl || !statusEl) return;
+                
+                let timerInterval;
+                let seconds = 0;
+                
+                startBtn.addEventListener('click', function() {
+                    // Start timer
+                    timerInterval = setInterval(function() {
+                        seconds++;
+                        const hours = Math.floor(seconds / 3600);
+                        const minutes = Math.floor((seconds % 3600) / 60);
+                        const secs = seconds % 60;
+                        
+                        // Format time
+                        timerEl.textContent = 
+                            (hours < 10 ? '0' + hours : hours) + ':' +
+                            (minutes < 10 ? '0' + minutes : minutes) + ':' +
+                            (secs < 10 ? '0' + secs : secs);
+                        
+                        // Calculate cost
+                        const isPS5 = deviceBox.querySelector('h3').textContent.includes('PS5');
+                        const hourlyRate = isPS5 ? 
+                            parseFloat(document.getElementById('ps5-price').value) : 
+                            parseFloat(document.getElementById('ps4-price').value);
+                        const cost = (seconds / 3600) * hourlyRate;
+                        costEl.textContent = cost.toFixed(2);
+                        
+                    }, 1000);
+                    
+                    // Update UI
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    statusEl.textContent = 'قيد الاستخدام';
+                    statusEl.classList.remove('available');
+                    statusEl.classList.add('in-use');
+                });
+                
+                stopBtn.addEventListener('click', function() {
+                    // Stop timer
+                    clearInterval(timerInterval);
+                    
+                    // Update UI
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    statusEl.textContent = 'متاح';
+                    statusEl.classList.remove('in-use');
+                    statusEl.classList.add('available');
+                    
+                    // Alert total cost
+                    const finalCost = parseFloat(costEl.textContent);
+                    alert(`تم إنهاء الجلسة. التكلفة الإجمالية: ${finalCost} جنيه`);
+                    
+                    // Reset timer and cost
+                    seconds = 0;
+                    timerEl.textContent = '00:00:00';
+                    costEl.textContent = '0.00';
+                });
+            });
+        }
+        
+        // Initialize device timers
+        setupDeviceTimers();
+        
+        // Save settings
+        document.getElementById('save-settings').addEventListener('click', function() {
+            alert('تم حفظ الإعدادات بنجاح');
+        });
+        
+        // Modal functionality
+        function setupModals() {
+            // Get all modals
+            const modals = document.querySelectorAll('.modal');
+            
+            // Get all close buttons
+            const closeButtons = document.querySelectorAll('.close-modal, .modal-btn.cancel');
+            
+            // Close modal when clicking close button or cancel button
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside of modal content
+            window.addEventListener('click', function(event) {
+                modals.forEach(modal => {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Initialize modals
+        setupModals();
+        
+        // Add Food Button
+        document.getElementById('add-food-btn').addEventListener('click', function() {
+            document.getElementById('add-food-modal').style.display = 'block';
+        });
+        
+        // Add Drink Button
+        document.getElementById('add-drink-btn').addEventListener('click', function() {
+            document.getElementById('add-drink-modal').style.display = 'block';
+        });
+        
+        // Add PS5 Button
+        document.getElementById('add-ps5-btn').addEventListener('click', function() {
+            document.getElementById('add-ps5-modal').style.display = 'block';
+        });
+        
+        // Add PS4 Button
+        document.getElementById('add-ps4-btn').addEventListener('click', function() {
+            document.getElementById('add-ps4-modal').style.display = 'block';
+        });
+        
+        // Generate unique ID
+        function generateUniqueId(prefix) {
+            return prefix + '-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+        
+        // Confirm Add Food
+        document.getElementById('confirm-add-food').addEventListener('click', function() {
+            const foodName = document.getElementById('new-food-name').value;
+            const foodPrice = document.getElementById('new-food-price').value;
+            
+            if (!foodName || !foodPrice) {
+                alert('يرجى إدخال اسم المأكولات والسعر');
+                return;
+            }
+            
+            // Create new food item
+            const foodContainer = document.getElementById('food-container');
+            const newFoodItem = document.createElement('div');
+            const uniqueId = generateUniqueId('food');
+            newFoodItem.className = 'menu-item';
+            newFoodItem.setAttribute('data-id', uniqueId);
+            newFoodItem.innerHTML = `
+                <button class="delete-btn" title="حذف">×</button>
+                <span class="menu-item-name">${foodName}</span>
+                <span class="menu-item-price">${foodPrice} جنيه</span>
+                <button class="control-btn start-btn">إضافة</button>
+            `;
+            
+            // Insert before the add button container
+            const addBtnContainer = document.querySelector('#food-container .add-new-container');
+            foodContainer.insertBefore(newFoodItem, addBtnContainer);
+            
+            // Setup delete button
+            setupDeleteButtons();
+            
+            // Close modal and reset form
+            document.getElementById('add-food-modal').style.display = 'none';
+            document.getElementById('new-food-name').value = '';
+            document.getElementById('new-food-price').value = '';
+            
+            // Update delete lists
+            updateDeleteLists();
+            
+            alert('تم إضافة المأكولات بنجاح');
+        });
+        
+        // Confirm Add Drink
+        document.getElementById('confirm-add-drink').addEventListener('click', function() {
+            const drinkName = document.getElementById('new-drink-name').value;
+            const drinkPrice = document.getElementById('new-drink-price').value;
+            
+            if (!drinkName || !drinkPrice) {
+                alert('يرجى إدخال اسم المشروب والسعر');
+                return;
+            }
+            
+            // Create new drink item
+            const drinkContainer = document.getElementById('drinks-container');
+            const newDrinkItem = document.createElement('div');
+            const uniqueId = generateUniqueId('drink');
+            newDrinkItem.className = 'menu-item';
+            newDrinkItem.setAttribute('data-id', uniqueId);
+            newDrinkItem.innerHTML = `
+                <button class="delete-btn" title="حذف">×</button>
+                <span class="menu-item-name">${drinkName}</span>
+                <span class="menu-item-price">${drinkPrice} جنيه</span>
+                <button class="control-btn start-btn">إضافة</button>
+            `;
+            
+            // Insert before the add button container
+            const addBtnContainer = document.querySelector('#drinks-container .add-new-container');
+            drinkContainer.insertBefore(newDrinkItem, addBtnContainer);
+            
+            // Setup delete button
+            setupDeleteButtons();
+            
+            // Close modal and reset form
+            document.getElementById('add-drink-modal').style.display = 'none';
+            document.getElementById('new-drink-name').value = '';
+            document.getElementById('new-drink-price').value = '';
+            
+            // Update delete lists
+            updateDeleteLists();
+            
+            alert('تم إضافة المشروب بنجاح');
+        });
+        
+        // Confirm Add PS5
+        document.getElementById('confirm-add-ps5').addEventListener('click', function() {
+            const deviceNumber = document.getElementById('new-ps5-number').value;
+            
+            if (!deviceNumber) {
+                alert('يرجى إدخال رقم الجهاز');
+                return;
+            }
+            
+            // Create new PS5 device
+            const ps5Container = document.getElementById('ps5-devices');
+            const newPS5Device = document.createElement('div');
+            const uniqueId = generateUniqueId('ps5');
+            newPS5Device.className = 'device-box';
+            newPS5Device.setAttribute('data-id', uniqueId);
+            newPS5Device.innerHTML = `
+                <button class="delete-btn" title="حذف">×</button>
+                <h3>
+                    جهاز PS5 #${deviceNumber}
+                    <span class="status available">متاح</span>
+                </h3>
+                <div class="device-info">
+                    <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                    <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                </div>
+                <div class="device-actions">
+                    <button class="control-btn start-btn">بدء</button>
+                    <button class="control-btn stop-btn" disabled>إيقاف</button>
+                </div>
+            `;
+            
+            // Insert before the add button container
+            const addBtnContainer = document.querySelector('#ps5-devices .add-new-container');
+            ps5Container.insertBefore(newPS5Device, addBtnContainer);
+            
+            // Setup delete button
+            setupDeleteButtons();
+            
+            // Close modal and reset form
+            document.getElementById('add-ps5-modal').style.display = 'none';
+            document.getElementById('new-ps5-number').value = '';
+            
+            // Setup timer for new device
+            setupDeviceTimers();
+            
+            // Update delete lists
+            updateDeleteLists();
+            
+            alert(`تم إضافة جهاز PS5 #${deviceNumber} بنجاح`);
+        });
+        
+        // Confirm Add PS4
+        document.getElementById('confirm-add-ps4').addEventListener('click', function() {
+            const deviceNumber = document.getElementById('new-ps4-number').value;
+            
+            if (!deviceNumber) {
+                alert('يرجى إدخال رقم الجهاز');
+                return;
+            }
+            
+            // Create new PS4 device
+            const ps4Container = document.getElementById('ps4-devices');
+            const newPS4Device = document.createElement('div');
+            const uniqueId = generateUniqueId('ps4');
+            newPS4Device.className = 'device-box';
+            newPS4Device.setAttribute('data-id', uniqueId);
+            newPS4Device.innerHTML = `
+                <button class="delete-btn" title="حذف">×</button>
+                <h3>
+                    جهاز PS4 #${deviceNumber}
+                    <span class="status available">متاح</span>
+                </h3>
+                <div class="device-info">
+                    <p>الوقت المستهلك: <span class="timer">00:00:00</span></p>
+                    <p>التكلفة: <span class="cost">0.00</span> جنيه</p>
+                </div>
+                <div class="device-actions">
+                    <button class="control-btn start-btn">بدء</button>
+                    <button class="control-btn stop-btn" disabled>إيقاف</button>
+                </div>
+            `;
+            
+            // Insert before the add button container
+            const addBtnContainer = document.querySelector('#ps4-devices .add-new-container');
+            ps4Container.insertBefore(newPS4Device, addBtnContainer);
+            
+            // Setup delete button
+            setupDeleteButtons();
+            
+            // Close modal and reset form
+            document.getElementById('add-ps4-modal').style.display = 'none';
+            document.getElementById('new-ps4-number').value = '';
+            
+            // Setup timer for new device
+            setupDeviceTimers();
+            
+            // Update delete lists
+            updateDeleteLists();
+            
+            alert(`تم إضافة جهاز PS4 #${deviceNumber} بنجاح`);
+        });
+        
+        // Add from Settings
+        document.getElementById('add-device-btn').addEventListener('click', function() {
+            const deviceType = document.getElementById('new-device-type').value;
+            const deviceNumber = document.getElementById('new-device-number').value;
+            
+            if (deviceType === 'PS5') {
+                document.getElementById('new-ps5-number').value = deviceNumber;
+                document.getElementById('confirm-add-ps5').click();
+            } else {
+                document.getElementById('new-ps4-number').value = deviceNumber;
+                document.getElementById('confirm-add-ps4').click();
+            }
+        });
+        
+        document.getElementById('add-item-btn').addEventListener('click', function() {
+            const itemType = document.getElementById('new-item-type').value;
+            const itemName = document.getElementById('new-item-name').value;
+            const itemPrice = document.getElementById('new-item-price').value;
+            
+            if (itemType === 'food') {
+                document.getElementById('new-food-name').value = itemName;
+                document.getElementById('new-food-price').value = itemPrice;
+                document.getElementById('confirm-add-food').click();
+            } else {
+                document.getElementById('new-drink-name').value = itemName;
+                document.getElementById('new-drink-price').value = itemPrice;
+                document.getElementById('confirm-add-drink').click();
+            }
+        });
+        
+        // Language Switching
+        const languageButtons = document.querySelectorAll('.language-btn');
+        const htmlElement = document.documentElement;
+        
+        languageButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                
+                // Update active button
+                languageButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Set language and direction
+                htmlElement.setAttribute('lang', lang);
+                htmlElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+                
+                // Update UI text based on language
+                if (lang === 'en') {
+                    // This is a simplified example - in a real app, you would use a translation system
+                    document.querySelector('.header h1').textContent = 'Cyber Cafe Management';
+                    document.querySelector('[data-page="dashboard"]').textContent = 'Devices';
+                    document.querySelector('[data-page="drinks"]').textContent = 'Drinks';
+                    document.querySelector('[data-page="food"]').textContent = 'Food';
+                    document.querySelector('[data-page="settings"]').textContent = 'Settings';
+                    document.getElementById('logout-btn').textContent = 'Logout';
+                    // ... and so on for other UI elements
+                } else {
+                    // Restore Arabic text
+                    document.querySelector('.header h1').textContent = 'إدارة سايبر كافيه';
+                    document.querySelector('[data-page="dashboard"]').textContent = 'الأجهزة';
+                    document.querySelector('[data-page="drinks"]').textContent = 'المشروبات';
+                    document.querySelector('[data-page="food"]').textContent = 'المأكولات';
+                    document.querySelector('[data-page="settings"]').textContent = 'الإعدادات';
+                    document.getElementById('logout-btn').textContent = 'تسجيل الخروج';
+                    // ... and so on for other UI elements
+                }
+                
+                alert(`تم تغيير اللغة إلى ${lang === 'ar' ? 'العربية' : 'الإنجليزية'}`);
+            });
+        });
+        
+        // Dark/Light Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const bodyElement = document.body;
+        
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                bodyElement.classList.add('dark-mode');
+                alert('تم تفعيل الوضع المظلم');
+            } else {
+                bodyElement.classList.remove('dark-mode');
+                alert('تم تفعيل الوضع الفاتح');
+            }
+        });
+        
+        // Delete functionality
+        let itemToDelete = null;
+        
+        function setupDeleteButtons() {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const item = this.closest('.device-box, .menu-item');
+                    itemToDelete = item;
+                    
+                    // Show confirm delete modal
+                    document.getElementById('confirm-delete-modal').style.display = 'block';
+                });
+            });
+        }
+        
+        // Initialize delete buttons
+        setupDeleteButtons();
+        
+        // Confirm Delete
+        document.getElementById('confirm-delete').addEventListener('click', function() {
+            if (itemToDelete) {
+                // Remove the item
+                itemToDelete.remove();
+                
+                // Close modal
+                document.getElementById('confirm-delete-modal').style.display = 'none';
+                
+                // Update delete lists
+                updateDeleteLists();
+                
+                alert('تم حذف العنصر بنجاح');
+                
+                // Reset itemToDelete
+                itemToDelete = null;
+            }
+        });
+        
+        // Update Delete Lists in Settings
+        function updateDeleteLists() {
+            // Clear existing lists
+            document.getElementById('ps5-delete-list').innerHTML = '<h4>أجهزة PS5</h4>';
+            document.getElementById('ps4-delete-list').innerHTML = '<h4>أجهزة PS4</h4>';
+            document.getElementById('food-delete-list').innerHTML = '<h4>المأكولات</h4>';
+            document.getElementById('drinks-delete-list').innerHTML = '<h4>المشروبات</h4>';
+            
+            // Add PS5 devices to list
+            document.querySelectorAll('#ps5-devices .device-box').forEach(device => {
+                const deviceName = device.querySelector('h3').textContent.trim().split('\n')[0].trim();
+                const deviceId = device.getAttribute('data-id');
+                
+                const deleteItem = document.createElement('div');
+                deleteItem.className = 'delete-item';
+                deleteItem.innerHTML = `
+                    <span>${deviceName}</span>
+                    <button class="delete-item-btn" data-id="${deviceId}">حذف</button>
+                `;
+                
+                document.getElementById('ps5-delete-list').appendChild(deleteItem);
+            });
+            
+            // Add PS4 devices to list
+            document.querySelectorAll('#ps4-devices .device-box').forEach(device => {
+                const deviceName = device.querySelector('h3').textContent.trim().split('\n')[0].trim();
+                const deviceId = device.getAttribute('data-id');
+                
+                const deleteItem = document.createElement('div');
+                deleteItem.className = 'delete-item';
+                deleteItem.innerHTML = `
+                    <span>${deviceName}</span>
+                    <button class="delete-item-btn" data-id="${deviceId}">حذف</button>
+                `;
+                
+                document.getElementById('ps4-delete-list').appendChild(deleteItem);
+            });
+            
+            // Add food items to list
+            document.querySelectorAll('#food-container .menu-item').forEach(item => {
+                const itemName = item.querySelector('.menu-item-name').textContent;
+                const itemId = item.getAttribute('data-id');
+                
+                const deleteItem = document.createElement('div');
+                deleteItem.className = 'delete-item';
+                deleteItem.innerHTML = `
+                    <span>${itemName}</span>
+                    <button class="delete-item-btn" data-id="${itemId}">حذف</button>
+                `;
+                
+                document.getElementById('food-delete-list').appendChild(deleteItem);
+            });
+            
+            // Add drink items to list
+            document.querySelectorAll('#drinks-container .menu-item').forEach(item => {
+                const itemName = item.querySelector('.menu-item-name').textContent;
+                const itemId = item.getAttribute('data-id');
+                
+                const deleteItem = document.createElement('div');
+                deleteItem.className = 'delete-item';
+                deleteItem.innerHTML = `
+                    <span>${itemName}</span>
+                    <button class="delete-item-btn" data-id="${itemId}">حذف</button>
+                `;
+                
+                document.getElementById('drinks-delete-list').appendChild(deleteItem);
+            });
+            
+            // Setup delete buttons in lists
+            document.querySelectorAll('.delete-item-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    const itemToRemove = document.querySelector(`[data-id="${itemId}"]`);
+                    
+                    if (itemToRemove) {
+                        // Remove the item
+                        itemToRemove.remove();
+                        
+                        // Remove from delete list
+                        this.closest('.delete-item').remove();
+                        
+                        alert('تم حذف العنصر بنجاح');
+                    }
+                });
+            });
+        }
+        
+        // Initialize delete lists
+        updateDeleteLists();
+    </script>
+</body>
+</html>
